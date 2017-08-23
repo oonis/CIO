@@ -31,6 +31,11 @@ void findFaces(CascadeClassifier face_cascade, Mat frame) {
 int main() {
   
 	VideoCapture cap(0);
+	if(!cap.isOpened()) {
+		cout << "Unable to open camera" << endl;
+		return 1;
+	}
+
 	Mat frame;
 
 	// Load classifiers: assuming we're in build for now
