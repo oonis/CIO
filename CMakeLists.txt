@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.3)
 project( CIO )
 find_package(OpenCV REQUIRED)
-add_executable( CIO src/main.cpp )
+add_executable( CIO src/main.cpp src/includes.h )
 target_link_libraries( CIO ${OpenCV_LIBS} )
