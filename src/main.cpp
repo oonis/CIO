@@ -1,22 +1,44 @@
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include "opencv2/objdetect.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+
 #include <iostream>
-using namespace cv;
+#include <stdio.h>
+
 using namespace std;
- 
-int main() {
-	VideoCapture stream1(0);   //ID 0 for first camera source
- 
-	if (!stream1.isOpened()) {
-		cout << "Unable to open camera" << endl;
+using namespace cv;
+
+void findFaces(CascadeClassifier face_cascade, Mat frame) {
+	vector<Rect> faces;
+	Mat frame_gray;
+	cvtColor(frame, frame_gray, COLOR_BGR2GRAY);
+	equalizeHist(frame_gray, frame_gray);
+
+	face_cascade.detectMultiScale(frame_gray, faces, 1.1, 3,
+		0|CASCADE_SCALE_IMAGE, Size(30, 30));
+
+	for( size_t i = 0; i < faces.size(); i++ ) {
+		Rect face = faces[i];
+		Point center(faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2);
+
+		rectangle(frame,Point(face.x,face.y),
+			Point(face.x+ face.width,face.y+face.height), Scalar(255,0,255),3,8,0 );
+		
 	}
- 
-	while (true) {
-		Mat cameraFrame;
-		stream1.read(cameraFrame);
-		imshow("camera", cameraFrame);
-		if (waitKey(30) == 27)
-			break;
+	imshow("Camera view", frame);
+}
+
+int main() {
+  
+	VideoCapture cap(0);
+	Mat frame;
+
+	// Load classifiers: assuming we're in build for now
+	CascadeClassifier face_cascade;
+	face_cascade.load("../resources/haarcascade_frontalface_default.xml");
+  
+	while(cap.read(frame) && waitKey(1) != '\33') {
+		findFaces(face_cascade,frame);
 	}
 	return 0;
 }
