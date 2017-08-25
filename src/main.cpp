@@ -36,7 +36,7 @@ int main() {
 	// Load classifiers: assuming we're in build for now
 	CascadeClassifier face_cascade;
 	face_cascade.load("../resources/haarcascade_frontalface_default.xml");
-  
+
 	while(cap.read(frame) && waitKey(1) != '\33') {
 		findFaces(face_cascade,frame);
 	}
