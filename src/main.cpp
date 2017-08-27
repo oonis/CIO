@@ -14,7 +14,7 @@ void findFaces(CascadeClassifier face_cascade, Mat frame) {
 
 	for( size_t i = 0; i < faces.size(); i++ ) {
 		Rect face = faces[i];
-		Point center(faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2);
+		Point center(face.x + face.width/2, face.y + face.height/2);
 
 		rectangle(frame,Point(face.x,face.y),
 			Point(face.x+ face.width,face.y+face.height), Scalar(255,0,255),3,8,0 );
